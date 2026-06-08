@@ -9,6 +9,7 @@ import { TokenService } from './token/token.service';
 import { TokenModule } from './token/token.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
+import { TestModule } from './test/test.module';
 import config from './config/config';
 
 @Module({
@@ -32,6 +33,7 @@ import config from './config/config';
     AuthModule,
     TokenModule,
     UserModule,
+    TestModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, TokenService],

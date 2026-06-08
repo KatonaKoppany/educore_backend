@@ -1,7 +1,11 @@
+import { Role } from '@/enums/role';
 import { Request } from 'express';
 
 declare module 'express' {
   interface Request {
-    userId: string;
+    user: {
+      userId: string;
+      role: Role;
+    };
   }
 }

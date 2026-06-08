@@ -7,7 +7,6 @@ import { SignupDto } from './dto/signup.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
-import { JwtService } from '@nestjs/jwt';
 import { TokenService } from '@/token/token.service';
 
 @Injectable()
@@ -65,7 +64,10 @@ export class AuthService {
       throw new UnauthorizedException('Wrong credentials');
     }
 
-    const tokens = await this.tokenService.generateUserToken(user.id);
+    const tokens = await this.tokenService.generateUserToken(
+      user.id,
+      user.role,
+    );
     return {
       ...tokens,
       userId: user.id,

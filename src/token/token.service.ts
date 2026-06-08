@@ -1,3 +1,4 @@
+import { Role } from '@/generated/prisma/enums';
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -13,8 +14,8 @@ export class TokenService {
   // ==========================================
   // Genearet User Token
   // ==========================================
-  async generateUserToken(userId: string) {
-    const payload = { sub: userId };
+  async generateUserToken(userId: string, userRole: Role) {
+    const payload = { sub: userId, role: userRole };
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = uuidv4();
 
@@ -58,13 +59,14 @@ export class TokenService {
         token: refreshToken,
         expiryDate: { gt: new Date() },
       },
+      include: { user: true },
     });
 
     if (!token) {
       throw new UnauthorizedException('Refresh token is invalid');
     }
 
-    return this.generateUserToken(token.userId);
+    return this.generateUserToken(token.userId, token.user.role);
   }
 
   // ==========================================
